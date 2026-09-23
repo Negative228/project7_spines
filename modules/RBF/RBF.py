@@ -13,11 +13,10 @@ if torch.cuda.is_available():
 class WeightCalculator:
     def __init__(self, input_dim, input_w=None):
         self.nIn = input_dim
-        self.nOut = 1
         if input_w is None:
             self.weights = (torch.rand(self.nIn, dtype=torch.float32)*0.1-0.05).to(device)
         else:
-            self.weights = torch.tensor(input_w, dtype=torch.float32).to(device)
+            self.weights = torch.as_tensor(input_w, dtype=torch.float32).to(device)
         
     def update(self, netSp, targetSp, teta, *args, **kwargs):
         pixel_nod_grid_flatten = netSp.permute([1, 2, 0]).flatten(0, 1)
@@ -29,12 +28,6 @@ class WeightCalculator:
 
     def get_weights(self):
         return self.weights.cpu().numpy()
-        
-    def get_normalized_weights(self):
-        w = self.weights
-        normalized = w - torch.min(w)
-        normalized = normalized / torch.max(normalized)
-        return normalized.cpu().numpy()
 
 def construct_phi(image, sigma=1, batch_size=None, NodeX1=None, NodeX2=None,
                                    pixel_pos=None, center_pos=None):
@@ -58,10 +51,10 @@ def construct_phi(image, sigma=1, batch_size=None, NodeX1=None, NodeX2=None,
         
         del xx, yy, x_coords, y_coords
     else:
-        node_centers = torch.tensor(center_pos, dtype=torch.float32, device=device)
+        node_centers = torch.as_tensor(center_pos, dtype=torch.float32, device=device)
     
     nIn = node_centers.shape[0]
-    targetSp_tensor = torch.tensor(image, dtype=torch.float32, device=device)
+    targetSp_tensor = torch.as_tensor(image, dtype=torch.float32, device=device)
     
     if batch_size is None:
         batch_size = nIn
@@ -86,7 +79,8 @@ def construct_phi(image, sigma=1, batch_size=None, NodeX1=None, NodeX2=None,
             dist_sq = row_diff**2 + col_diff**2
             
             rbf_values = torch.exp(-dist_sq / (2 * sigma * sigma))
-            
+            rbf_values[rbf_values < 1e-9] = 0
+
             sparse_rbf = rbf_values.to_sparse()
             sparse_matrices.append(sparse_rbf)
             
@@ -94,8 +88,6 @@ def construct_phi(image, sigma=1, batch_size=None, NodeX1=None, NodeX2=None,
         
         batched_netSp_sparse.append(torch.stack(sparse_matrices))
         del sparse_matrices, batch_centers
-        
-        torch.cuda.empty_cache()
     
     del node_centers, row_indices, col_indices
     torch.cuda.empty_cache()
@@ -107,7 +99,7 @@ def train_weights(netSp_sparse, targetSp_tensor, nIterations, start_teta,  decay
     iters = []
     count = 0
     if type(targetSp_tensor) != torch.Tensor:
-        targetSp_tensor = torch.tensor(targetSp_tensor, dtype=torch.float32).to(device)
+        targetSp_tensor = torch.as_tensor(targetSp_tensor, dtype=torch.float32).to(device)
 
     for batch in netSp_sparse:
         batch_size = len(batch)
@@ -123,8 +115,6 @@ def train_weights(netSp_sparse, targetSp_tensor, nIterations, start_teta,  decay
         for i in range(nIterations):
             #teta = teta if teta > end_teta else end_teta
             model.update(this_batch, targetSp_tensor, teta=teta)
-            
-
             teta = start_teta * decay_rate**i if teta > 0.01 else 0.01
         #iters += [i+1]
         seq_weights += list(model.get_weights())
@@ -150,7 +140,7 @@ def convert_3d_2d(netSp_sparse):
 
 
 def construct_yRBF(seq_weights, netSp_sparse):
-    yRBF = torch.mm(torch.tensor(seq_weights, dtype=torch.float32).to(device).unsqueeze(0), 
+    yRBF = torch.mm(torch.as_tensor(seq_weights, dtype=torch.float32).to(device).unsqueeze(0), 
                     convert_3d_2d(netSp_sparse)).reshape((netSp_sparse[0].shape[1], netSp_sparse[0].shape[2])).T
     return yRBF
 
