@@ -1,5 +1,4 @@
-[README.md](https://github.com/user-attachments/files/32743084/README.md)
-# RESPAN: Автоматическое обнаружение и анализ дендритных шипиков
+# Project7: Автоматическое обнаружение и анализ на субклеточном уровне
 
 [![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://www.python.org/)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
@@ -10,10 +9,10 @@
 
 Проект **project7_spines** посвящен созданию средств для автоматизации подготовки данных и разработке алгоритмов способных повысить отношение сигнал/шум на изображениях. 
 
-Конечной целью является полная автоматизация процесса сегментации дендритных шипиков — микроскопических выростов на дендритах нейронов, играющих ключевую роль в синаптической передаче и пластичности мозга.
+Конечной целью является полная автоматизация процесса оценки динамики нейронных структур мозга.
 
 ### Актуальность
-Ручная разметка дендритных шипиков экспертами-биологами — трудоемкий и субъективный процесс. Автоматизированные средства (например, RESPAN)  обеспечивают высокую скорость анализа, воспроизводимость результатов и объективность детектирования.
+Ручная разметка изображений двухфотонной лазерной сканирующей микроскопии экспертами-биологами — трудоемкий и субъективный процесс. Автоматизированные средства (например, RESPAN)  обеспечивают высокую скорость анализа, воспроизводимость результатов и объективность детектирования.
 
 ### Научный контекст
 Проект выполняется в рамках прикладного проекта Южного федерального университета (ЮФУ) по направлению «Гибридные нейросетевые и вейвлет-методы ИИ для реконструкции корковой активности и декодирования мысленных команд в мобильных системах ЭЭГ с ограниченным числом отведений».
@@ -22,7 +21,7 @@
 
 ## ✨ Возможности
 
-- 🤖 **Предобработка 3D-изображений** дендритов и шипиков при помощи нейронной РБФ-сети.
+- 🤖 **Предобработка 3D-изображений** z-стеков при помощи нейронной РБФ-сети.
 - 🧮 **Подготовка данных** для дальнейшей работы в RESPAN
 - 📈 **Визуализация результатов** с возможностью сравнения разметки экспертов и RESPAN.
 - 📦 **Готовые примеры** использования в Jupyter Notebook.
@@ -103,7 +102,6 @@ jupyter notebook
 * González-Burgos I. Dendritic spines plasticity and learning/memory processes: Theory, evidence and perspectives // Dendritic Spines: Biochemistry, Modeling and Properties / ed. by L. R. Baylog. – New York : Nova Science Publishers, 2009. – P. 163–186.	
 * Ma S., Zuo Y. Synaptic modifications in learning and memory – A dendritic spine story // Semin. Cell Dev. Biol. – 2022. – Vol. 125. – P. 84–90. – DOI: 10.1016/j.semcdb.2021.05.015.
 * Rochefort N. L., Konnerth A. Dendritic spines: from structure to in vivo function // EMBO Rep. – 2012. – Vol. 13, No. 8. – P. 699–708. – DOI: 10.1038/embor.2012.102.
-* Пальцын А. А., Свиридкина Н. Б. Шипики дендритов // Патол. физиол. и эксперим. терапия. – 2022. – Т. 66, № 1. – С. 120–126. – DOI: 10.25557/0031-2991.2022.01.120-126. 
 * Pchitskaya E., Bezprozvanny I. Dendritic Spines Shape Analysis – Classification or Clusterization? Perspective // Front. Synaptic Neurosci. – 2020. – Vol. 12. – Art. 31. – DOI: 10.3389/fnsyn.2020.00031.
 * von Bohlen und Halbach O. Structure and function of dendritic spines within the hippocampus // Ann. Anat. – 2009. – Vol. 191, No. 6. – P. 518–531. – DOI: 10.1016/j.aanat.2009.08.006.
 * Papa M., Bundman M. C., Greenberger V., Segal M. Morphological analysis of dendritic spine development in primary cultures of hippocampal neurons // J. Neurosci. – 1995. – Vol. 15, No. 1, Pt. 1. – P. 1–11. – DOI: 10.1523/JNEUROSCI.15-01-00001.1995.
