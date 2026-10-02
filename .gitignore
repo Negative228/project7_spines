@@ -181,6 +181,7 @@ cython_debug/
 .cursorindexingignore
 
 data/
+tasks/
 example/temp/
 example/example_data/
 example/example_data.zip
